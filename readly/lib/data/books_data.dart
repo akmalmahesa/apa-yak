@@ -1,0 +1,122 @@
+import '../core/models.dart';
+
+final List<Book> allBooks = [
+  Book(
+    id: '1',
+    title: 'The Three-Body Problem',
+    author: 'Liu Cixin',
+    description:
+        "Set against the backdrop of China's Cultural Revolution, a secret military project sends signals into space to make contact with aliens. A hard sci-fi masterpiece about humanity's first contact with an alien civilization and its terrifying implications.",
+    coverUrl: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400',
+    rating: 4.6,
+    pages: 400,
+    year: 2008,
+    origin: 'China',
+    genres: ['Eastern', 'Sci-Fi'],
+    tags: ['#hard-sci-fi', '#alien', '#physics', '#epic'],
+    currentPage: 268,
+  ),
+  Book(
+    id: '2',
+    title: 'The Great Gatsby',
+    author: 'F. Scott Fitzgerald',
+    description:
+        'A classic tale of wealth, love, and the American Dream set in the roaring Jazz Age of 1920s New York.',
+    coverUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400',
+    rating: 4.2,
+    pages: 180,
+    year: 1925,
+    origin: 'USA',
+    genres: ['Western', 'Classic'],
+    tags: ['#classic', '#american-dream', '#romance'],
+    currentPage: 90,
+  ),
+  Book(
+    id: '3',
+    title: 'Pachinko',
+    author: 'Min Jin Lee',
+    description:
+        'An epic historical saga that follows a Korean family across four generations, from a small fishing village in early 20th-century Korea to the bustling pachinko parlors of Japan. A story of sacrifice, perseverance, and identity that spans eight decades.',
+    coverUrl: 'https://images.unsplash.com/photo-1529148482759-b35b25c5f217?w=400',
+    rating: 4.5,
+    pages: 496,
+    year: 2017,
+    origin: 'Korea',
+    genres: ['Eastern', 'Historical'],
+    tags: ['#family', '#identity', '#sacrifice', '#saga'],
+    isSaved: true,
+  ),
+  Book(
+    id: '4',
+    title: 'Convenience Store Woman',
+    author: 'Sayaka Murata',
+    description:
+        'Keiko Furukura has worked at the same convenience store for eighteen years. She is perfectly suited to the job, but society considers her strange for not wanting more from life.',
+    coverUrl: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=400',
+    rating: 3.9,
+    pages: 163,
+    year: 2016,
+    origin: 'Japan',
+    genres: ['Eastern', 'Literary Fiction'],
+    tags: ['#japan', '#society', '#identity'],
+  ),
+  Book(
+    id: '5',
+    title: '1984',
+    author: 'George Orwell',
+    description:
+        'In the totalitarian superstate of Oceania, Winston Smith secretly rebels against the Party and its omnipresent surveillance and thought control.',
+    coverUrl: 'https://images.unsplash.com/photo-1495640388908-05fa85288e61?w=400',
+    rating: 4.7,
+    pages: 328,
+    year: 1949,
+    origin: 'UK',
+    genres: ['Western', 'Dystopian'],
+    tags: ['#dystopia', '#politics', '#surveillance'],
+  ),
+  Book(
+    id: '6',
+    title: 'Pride and Prejudice',
+    author: 'Jane Austen',
+    description:
+        'The witty Elizabeth Bennet navigates issues of manners, upbringing, morality, and marriage in early 19th-century England.',
+    coverUrl: 'https://images.unsplash.com/photo-1474932430478-367dbb6832c1?w=400',
+    rating: 4.3,
+    pages: 432,
+    year: 1813,
+    origin: 'UK',
+    genres: ['Western', 'Classic', 'Romance'],
+    tags: ['#romance', '#classic', '#england'],
+  ),
+  Book(
+    id: '7',
+    title: 'Norwegian Wood',
+    author: 'Haruki Murakami',
+    description:
+        'A nostalgic story of loss and sexuality set in late 1960s Tokyo during a time of student unrest and personal grief.',
+    coverUrl: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=400',
+    rating: 4.4,
+    pages: 296,
+    year: 1987,
+    origin: 'Japan',
+    genres: ['Eastern', 'Literary Fiction'],
+    tags: ['#japan', '#love', '#nostalgia'],
+  ),
+  Book(
+    id: '8',
+    title: 'Bumi Manusia',
+    author: 'Pramoedya Ananta Toer',
+    description:
+        'Set in colonial Dutch East Indies, this novel follows Minke, a native Javanese student who falls in love with Annelies, the daughter of a Dutch concubine.',
+    coverUrl: 'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?w=400',
+    rating: 4.8,
+    pages: 370,
+    year: 1980,
+    origin: 'Indonesia',
+    genres: ['Eastern', 'Historical'],
+    tags: ['#indonesia', '#colonial', '#love', '#resistance'],
+  ),
+];
+
+List<Book> get continueReadingBooks => allBooks.where((b) => b.isReading).toList();
+List<Book> get trendingBooks        => allBooks.where((b) => !b.isReading).toList();
