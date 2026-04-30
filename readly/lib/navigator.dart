@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readly/screens/reading_tracker.dart';
 import 'screens/home_screen.dart';
 import 'screens/explore_screen.dart';
 import 'widgets/bottom_nav.dart';
@@ -18,7 +19,7 @@ class _AppNavigatorState extends State<AppNavigator> {
   static const _pages = <Widget>[
     HomeScreen(),
     ExploreScreen(),
-    _Placeholder(icon: Icons.menu_book,     title: 'Library'),
+    ReadingTrackerPage(),
     _Placeholder(icon: Icons.emoji_events,  title: 'Badges'),
     _Placeholder(icon: Icons.person,        title: 'Profile'),
   ];

@@ -10,8 +10,9 @@ class Book {
   final String origin;
   final List<String> genres;
   final List<String> tags;
-  final int? currentPage;
+  int? currentPage;
   bool isSaved;
+  bool isCompleted;
 
   Book({
     required this.id,
@@ -27,6 +28,7 @@ class Book {
     required this.tags,
     this.currentPage,
     this.isSaved = false,
+    this.isCompleted = false,
   });
 
   bool get isReading       => currentPage != null;

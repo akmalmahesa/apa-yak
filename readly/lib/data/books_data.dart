@@ -15,6 +15,7 @@ final List<Book> allBooks = [
     genres: ['Eastern', 'Sci-Fi'],
     tags: ['#hard-sci-fi', '#alien', '#physics', '#epic'],
     currentPage: 268,
+    isCompleted: false,
   ),
   Book(
     id: '2',
@@ -30,6 +31,7 @@ final List<Book> allBooks = [
     genres: ['Western', 'Classic'],
     tags: ['#classic', '#american-dream', '#romance'],
     currentPage: 90,
+    isCompleted: false,
   ),
   Book(
     id: '3',
@@ -45,6 +47,8 @@ final List<Book> allBooks = [
     genres: ['Eastern', 'Historical'],
     tags: ['#family', '#identity', '#sacrifice', '#saga'],
     isSaved: true,
+    currentPage: 496,
+    isCompleted: true,
   ),
   Book(
     id: '4',
@@ -59,6 +63,8 @@ final List<Book> allBooks = [
     origin: 'Japan',
     genres: ['Eastern', 'Literary Fiction'],
     tags: ['#japan', '#society', '#identity'],
+    currentPage: 163,
+    isCompleted: true,
   ),
   Book(
     id: '5',
@@ -73,6 +79,8 @@ final List<Book> allBooks = [
     origin: 'UK',
     genres: ['Western', 'Dystopian'],
     tags: ['#dystopia', '#politics', '#surveillance'],
+    currentPage: 328,
+    isCompleted: false,
   ),
   Book(
     id: '6',
@@ -87,6 +95,8 @@ final List<Book> allBooks = [
     origin: 'UK',
     genres: ['Western', 'Classic', 'Romance'],
     tags: ['#romance', '#classic', '#england'],
+    currentPage: 200,
+    isCompleted: false,
   ),
   Book(
     id: '7',
@@ -101,6 +111,8 @@ final List<Book> allBooks = [
     origin: 'Japan',
     genres: ['Eastern', 'Literary Fiction'],
     tags: ['#japan', '#love', '#nostalgia'],
+    currentPage: 150,
+    isCompleted: false,
   ),
   Book(
     id: '8',
@@ -115,6 +127,8 @@ final List<Book> allBooks = [
     origin: 'Indonesia',
     genres: ['Eastern', 'Historical'],
     tags: ['#indonesia', '#colonial', '#love', '#resistance'],
+    currentPage: 185,
+    isCompleted: false,
   ),
 ];
 
