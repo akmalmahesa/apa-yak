@@ -14,10 +14,22 @@ class BookDetailScreen extends StatefulWidget {
 class _BookDetailScreenState extends State<BookDetailScreen> {
   late bool _isSaved;
 
+  Book get _sharedBook =>
+      allBooks.firstWhere((book) => book.id == widget.book.id);
+
   @override
   void initState() {
     super.initState();
     _isSaved = widget.book.isSaved;
+  }
+
+  void _toggleSaved() {
+    setState(() {
+      _isSaved = !_isSaved;
+      _sharedBook.isSaved = _isSaved;
+      widget.book.isSaved = _isSaved;
+      libraryVersion.value = libraryVersion.value + 1;
+    });
   }
 
   @override
@@ -68,18 +80,14 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             Image.network(
               book.coverUrl,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) =>
-                  Container(color: AppColors.primary),
+              errorBuilder: (_, __, ___) => Container(color: AppColors.primary),
             ),
             DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.72),
-                  ],
+                  colors: [Colors.transparent, Colors.black.withOpacity(0.72)],
                 ),
               ),
             ),
@@ -114,7 +122,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (isEastern) const Text('🌏 ', style: TextStyle(fontSize: 11)),
+                  if (isEastern)
+                    const Text('🌏 ', style: TextStyle(fontSize: 11)),
                   Text(
                     g,
                     style: TextStyle(
@@ -189,21 +198,14 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             label: 'Published',
           ),
           _divider(),
-          _MetaItem(
-            icon: Icons.language,
-            value: book.origin,
-            label: 'Origin',
-          ),
+          _MetaItem(icon: Icons.language, value: book.origin, label: 'Origin'),
         ],
       ),
     );
   }
 
-  Widget _divider() => Container(
-        width: 1,
-        height: 36,
-        color: AppColors.borderColor,
-      );
+  Widget _divider() =>
+      Container(width: 1, height: 36, color: AppColors.borderColor);
 
   // ── About ──────────────────────────────────────────────────────────────────
 
@@ -342,17 +344,19 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           const SizedBox(width: 12),
           Expanded(
             child: OutlinedButton.icon(
-              onPressed: () => setState(() => _isSaved = !_isSaved),
+              onPressed: _toggleSaved,
               icon: Icon(
                 _isSaved ? Icons.bookmark : Icons.bookmark_outline,
                 size: 18,
               ),
               label: Text(_isSaved ? 'Saved' : 'Add to Library'),
               style: OutlinedButton.styleFrom(
-                foregroundColor:
-                    _isSaved ? AppColors.textPrimary : AppColors.primary,
-                backgroundColor:
-                    _isSaved ? AppColors.accent : Colors.transparent,
+                foregroundColor: _isSaved
+                    ? AppColors.textPrimary
+                    : AppColors.primary,
+                backgroundColor: _isSaved
+                    ? AppColors.accent
+                    : Colors.transparent,
                 side: BorderSide(
                   color: _isSaved ? AppColors.accent : AppColors.primary,
                 ),
@@ -404,9 +408,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               return GestureDetector(
                 onTap: () => Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => BookDetailScreen(book: b),
-                  ),
+                  MaterialPageRoute(builder: (_) => BookDetailScreen(book: b)),
                 ),
                 child: SizedBox(
                   width: 110,

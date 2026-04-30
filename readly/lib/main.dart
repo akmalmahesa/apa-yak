@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/theme.dart';
-import 'navigator.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ class ReadlyApp extends StatelessWidget {
       title: 'Readly',
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
-      home: const AppNavigator(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -26,9 +26,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
     if (_query.isEmpty) return [];
     final q = _query.toLowerCase();
     return allBooks
-        .where((b) =>
-            b.title.toLowerCase().contains(q) ||
-            b.author.toLowerCase().contains(q))
+        .where(
+          (b) =>
+              b.title.toLowerCase().contains(q) ||
+              b.author.toLowerCase().contains(q),
+        )
         .toList();
   }
 
@@ -45,7 +47,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
       title: 'New releases',
       subtitle: 'The new books our community is most excited about',
       layout: _Layout.grid2,
-      bookIndices: [2, 3],
+      bookIndices: [8, 9],
+    ),
+    _SectionConfig(
+      title: 'Bestsellers',
+      subtitle: 'Popular reads that keep showing up on every shelf',
+      layout: _Layout.grid3,
+      bookIndices: [12, 13, 14],
     ),
     _SectionConfig(
       title: 'Eastern treasures',
@@ -63,7 +71,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       title: 'Local books',
       subtitle: 'Stories from our own backyard',
       layout: _Layout.grid3,
-      bookIndices: [7, 2, 3],
+      bookIndices: [7, 10, 11],
     ),
   ];
 
@@ -155,7 +163,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
         child: Center(
           child: Text(
             'No books found.',
-            style: TextStyle(color: AppColors.textMuted, fontFamily: 'sans-serif'),
+            style: TextStyle(
+              color: AppColors.textMuted,
+              fontFamily: 'sans-serif',
+            ),
           ),
         ),
       );
@@ -202,19 +213,13 @@ class _SearchResultTile extends StatelessWidget {
           color: AppColors.textPrimary,
         ),
       ),
-      subtitle: Text(
-        book.author,
-        style: AppTextStyles.caption,
-      ),
+      subtitle: Text(book.author, style: AppTextStyles.caption),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.star, color: AppColors.starColor, size: 14),
           const SizedBox(width: 3),
-          Text(
-            book.rating.toString(),
-            style: AppTextStyles.caption,
-          ),
+          Text(book.rating.toString(), style: AppTextStyles.caption),
         ],
       ),
       onTap: () => Navigator.push(
@@ -247,9 +252,8 @@ class _SectionWidget extends StatelessWidget {
   final _SectionConfig config;
   const _SectionWidget({super.key, required this.config});
 
-  List<Book> get _books => config.bookIndices
-      .map((i) => allBooks[i % allBooks.length])
-      .toList();
+  List<Book> get _books =>
+      config.bookIndices.map((i) => allBooks[i % allBooks.length]).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -300,12 +304,18 @@ class _SectionWidget extends StatelessWidget {
           children: [
             Expanded(
               child: ExploreBookTile(
-                  book: books[0], showBookmark: true, height: 130),
+                book: books[0],
+                showBookmark: true,
+                height: 130,
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: ExploreBookTile(
-                  book: books[1], showBookmark: true, height: 130),
+                book: books[1],
+                showBookmark: true,
+                height: 130,
+              ),
             ),
           ],
         );
@@ -314,17 +324,26 @@ class _SectionWidget extends StatelessWidget {
           children: [
             Expanded(
               child: ExploreBookTile(
-                  book: books[0], showBookmark: true, height: 130),
+                book: books[0],
+                showBookmark: true,
+                height: 130,
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: ExploreBookTile(
-                  book: books[1], showBookmark: true, height: 130),
+                book: books[1],
+                showBookmark: true,
+                height: 130,
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: ExploreBookTile(
-                  book: books[2], showBookmark: true, height: 130),
+                book: books[2],
+                showBookmark: true,
+                height: 130,
+              ),
             ),
           ],
         );

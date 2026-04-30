@@ -22,39 +22,67 @@ class ExploreBookTile extends StatelessWidget {
         context,
         MaterialPageRoute(builder: (_) => BookDetailScreen(book: book)),
       ),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              book.coverUrl,
-              height: height,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                height: height,
-                color: AppColors.tagBg,
-                child: const Icon(Icons.book, color: AppColors.textMuted),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  book.coverUrl,
+                  height: height,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    height: height,
+                    color: AppColors.tagBg,
+                    child: const Icon(Icons.book, color: AppColors.textMuted),
+                  ),
+                ),
               ),
+              if (showBookmark)
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Icon(
+                      Icons.bookmark_outline,
+                      size: 14,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            book.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Georgia',
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: AppColors.textPrimary,
             ),
           ),
-          if (showBookmark)
-            Positioned(
-              top: 8,
-              left: 8,
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(
-                  Icons.bookmark_outline,
-                  size: 14,
-                  color: AppColors.textPrimary,
-                ),
-              ),
+          const SizedBox(height: 2),
+          Text(
+            book.author,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'sans-serif',
+              fontSize: 11,
+              color: AppColors.textSecondary,
             ),
+          ),
         ],
       ),
     );

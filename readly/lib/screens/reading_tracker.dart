@@ -4,6 +4,7 @@ import '../widgets/reading_item.dart';
 import '../widgets/update_panel.dart';
 import '../widgets/completed_item.dart';
 import '../data/books_data.dart';
+import '../data/xp_data.dart';
 import '../core/models.dart';
 import '../core/theme.dart';
 
@@ -15,28 +16,22 @@ class ReadingTrackerPage extends StatefulWidget {
 }
 
 class _ReadingTrackerPageState extends State<ReadingTrackerPage> {
+  final ScrollController _scrollController = ScrollController();
+  final Map<String, GlobalKey> _itemKeys = {};
   String? selectedBookId;
   double sliderValue = 0;
   bool justUpdated = false;
 
-  Map<String, dynamic>? xpInfo;
-
   @override
-  void initState() {
-    super.initState();
-
-    xpInfo = {
-      'level': 7,
-      'progress': 60,
-      'totalXP': 2400,
-    };
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   List<Book> get readingList =>
       allBooks.where((b) => !b.isCompleted && b.currentPage != null).toList();
 
-  List<Book> get readBooks =>
-      allBooks.where((b) => b.isCompleted).toList();
+  List<Book> get readBooks => allBooks.where((b) => b.isCompleted).toList();
 
   Book? get selectedEntry {
     try {
@@ -46,11 +41,33 @@ class _ReadingTrackerPageState extends State<ReadingTrackerPage> {
     }
   }
 
+  GlobalKey _keyForBook(String bookId) {
+    final existingKey = _itemKeys[bookId];
+    if (existingKey != null) return existingKey;
+
+    final createdKey = GlobalKey();
+    _itemKeys[bookId] = createdKey;
+    return createdKey;
+  }
+
   void openBook(String bookId, double currentPage) {
     setState(() {
       selectedBookId = bookId;
       sliderValue = currentPage;
       justUpdated = false;
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final key = _itemKeys[bookId];
+      final context = key?.currentContext;
+      if (context == null) return;
+
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        alignment: 0.12,
+      );
     });
   }
 
@@ -61,23 +78,34 @@ class _ReadingTrackerPageState extends State<ReadingTrackerPage> {
       justUpdated = true;
 
       final book = allBooks.firstWhere((b) => b.id == selectedBookId);
+      final wasCompleted = book.isCompleted;
 
       book.currentPage = sliderValue.toInt();
 
       if (book.currentPage == book.pages) {
         book.isCompleted = true;
       }
+
+      final earnedXp = book.isCompleted && !wasCompleted ? book.pages : 10;
+      XpData.addXp(earnedXp);
+
+      // notify library change so other screens (badges) can update
+      libraryVersion.value = libraryVersion.value + 1;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final book = selectedEntry;
+    final selectedIndex = selectedBookId == null
+        ? -1
+        : readingList.indexWhere((entry) => entry.id == selectedBookId);
 
     return Scaffold(
       backgroundColor: AppColors.background, // ✅ pakai theme
       body: SafeArea(
         child: ListView(
+          controller: _scrollController,
           children: [
             /// HEADER
             Padding(
@@ -99,7 +127,7 @@ class _ReadingTrackerPageState extends State<ReadingTrackerPage> {
             ),
 
             /// XP CARD
-            XpCard(xpInfo: xpInfo),
+            const XpCard(),
 
             /// CURRENTLY READING
             Padding(
@@ -116,52 +144,56 @@ class _ReadingTrackerPageState extends State<ReadingTrackerPage> {
             if (readingList.isEmpty)
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text(
-                  "No books in progress",
-                  style: AppTextStyles.body,
-                ),
+                child: Text("No books in progress", style: AppTextStyles.body),
               )
             else
               Column(
-                children: readingList.map((book) {
-                  return ReadingItem(
-                    cr: {
-                      'bookId': book.id,
-                      'currentPage': book.currentPage ?? 0,
-                      'totalPages': book.pages,
-                    },
-                    book: {
-                      'title': book.title,
-                      'author': book.author,
-                      'cover': book.coverUrl,
-                    },
-                    selectedBookId: selectedBookId,
-                    onTap: () => openBook(
-                      book.id,
-                      (book.currentPage ?? 0).toDouble(),
+                children: [
+                  for (var i = 0; i < readingList.length; i++)
+                    KeyedSubtree(
+                      key: _keyForBook(readingList[i].id),
+                      child: Column(
+                        children: [
+                          ReadingItem(
+                            cr: {
+                              'bookId': readingList[i].id,
+                              'currentPage': readingList[i].currentPage ?? 0,
+                              'totalPages': readingList[i].pages,
+                            },
+                            book: {
+                              'title': readingList[i].title,
+                              'author': readingList[i].author,
+                              'cover': readingList[i].coverUrl,
+                            },
+                            selectedBookId: selectedBookId,
+                            onTap: () => openBook(
+                              readingList[i].id,
+                              (readingList[i].currentPage ?? 0).toDouble(),
+                            ),
+                          ),
+                          if (i == selectedIndex && book != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: UpdatePanel(
+                                selectedEntry: {
+                                  'cr': {'totalPages': book.pages},
+                                  'book': {
+                                    'title': book.title,
+                                    'cover': book.coverUrl,
+                                  },
+                                },
+                                sliderValue: sliderValue,
+                                setSliderValue: (v) {
+                                  setState(() => sliderValue = v);
+                                },
+                                handleUpdate: handleUpdate,
+                                justUpdated: justUpdated,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                  );
-                }).toList(),
-              ),
-
-            /// UPDATE PANEL
-            if (book != null)
-              UpdatePanel(
-                selectedEntry: {
-                  'cr': {
-                    'totalPages': book.pages,
-                  },
-                  'book': {
-                    'title': book.title,
-                    'cover': book.coverUrl,
-                  }
-                },
-                sliderValue: sliderValue,
-                setSliderValue: (v) {
-                  setState(() => sliderValue = v);
-                },
-                handleUpdate: handleUpdate,
-                justUpdated: justUpdated,
+                ],
               ),
 
             /// COMPLETED SECTION

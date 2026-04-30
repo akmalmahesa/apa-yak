@@ -35,3 +35,26 @@ class Book {
   double get progress      => isReading ? currentPage! / pages : 0;
   int get progressPercent  => (progress * 100).round();
 }
+
+// ── Badge Model ────────────────────────────────────────────────────────────
+class ReadlyBadge {
+  final String id;
+  final String name;
+  final String description;
+  final String icon;
+  final String category; // e.g., 'Reading', 'Social', 'Milestone'
+  final bool isUnlocked;
+  final int? unlockedDate; // timestamp
+  final String requirement; // How to unlock
+
+  ReadlyBadge({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.icon,
+    required this.category,
+    required this.isUnlocked,
+    this.unlockedDate,
+    required this.requirement,
+  });
+}

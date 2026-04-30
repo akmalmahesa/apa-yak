@@ -23,6 +23,8 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               sliver: _buildTrendingGrid(context),
             ),
+            SliverToBoxAdapter(child: _buildPopularBooksHeader()),
+            SliverToBoxAdapter(child: _buildPopularBooks(context)),
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
           ],
         ),
@@ -163,27 +165,78 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildTrendingGrid(BuildContext context) {
+    final books = trendingBooks;
+
+    if (books.isEmpty) {
+      return const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          child: Text(
+            'No trending books right now.',
+            style: AppTextStyles.caption,
+          ),
+        ),
+      );
+    }
+
     return SliverGrid(
-      delegate: SliverChildBuilderDelegate(
-        (context, i) {
-          final book = trendingBooks[i];
-          return TrendingCard(
-            book: book,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => BookDetailScreen(book: book),
-              ),
-            ),
-          );
-        },
-        childCount: trendingBooks.length,
-      ),
+      delegate: SliverChildBuilderDelegate((context, i) {
+        final book = books[i];
+        return TrendingCard(
+          book: book,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => BookDetailScreen(book: book)),
+          ),
+        );
+      }, childCount: books.length),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 14,
         mainAxisSpacing: 14,
         childAspectRatio: 0.72,
+      ),
+    );
+  }
+
+  Widget _buildPopularBooksHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Popular Books', style: AppTextStyles.sectionTitle),
+          Text(
+            'TRENDING',
+            style: AppTextStyles.label.copyWith(color: AppColors.primary),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPopularBooks(BuildContext context) {
+    final books = homeSpotlightBooks;
+    return SizedBox(
+      height: 300,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: books.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 14),
+        itemBuilder: (context, index) {
+          final book = books[index];
+          return SizedBox(
+            width: 180,
+            child: TrendingCard(
+              book: book,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => BookDetailScreen(book: book)),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

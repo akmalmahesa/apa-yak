@@ -47,6 +47,12 @@ class ReadingItem extends StatelessWidget {
                 width: 50,
                 height: 70,
                 fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 50,
+                  height: 70,
+                  color: AppColors.tagBg,
+                  child: const Icon(Icons.book, color: AppColors.textMuted, size: 28),
+                ),
               ),
             ),
 
